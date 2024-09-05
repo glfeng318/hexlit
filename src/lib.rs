@@ -95,7 +95,7 @@ pub mod internals {
 
     // Checks if part of set of valid delimiters.
     pub const fn is_valid_delimiter(c: u8) -> bool {
-        matches!(c, b' ' | b'"' | b'_' | b'|' | b'-' | b'\n')
+        matches!(c, b' ' | b'"' | b'_' | b'|' | b'-' | b'\n' | b',' | b':')
     }
 
     // Converts a individual byte into its correct integer
@@ -170,6 +170,16 @@ mod tests {
     #[test]
     fn test_leading_zeros_space() {
         assert_eq!(hex!("01 02 03 04"), [1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn test_comma_colon() {
+        assert_eq!(hex!("01,02,03,04"), [1, 2, 3, 4]);
+        assert_eq!(hex!("a1,b2,c3,d4"), [0xA1, 0xB2, 0xC3, 0xD4]);
+        assert_eq!(hex!("E5,E6,90,92"), [0xE5, 0xE6, 0x90, 0x92]);
+        assert_eq!(hex!("01:02:03:04"), [1, 2, 3, 4]);
+        assert_eq!(hex!("a1:b2:c3:d4"), [0xA1, 0xB2, 0xC3, 0xD4]);
+        assert_eq!(hex!("E5:E6:90:92"), [0xE5, 0xE6, 0x90, 0x92]);
     }
 
     #[test]
